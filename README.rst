@@ -171,7 +171,8 @@ Running the buildout::
         Update element style  visual-portal-wrapper  margin-top  50%
         Sleep  3s
 
-Executing the test::
+Executing the test (replace HOST_LAN_IP with a such IP or hostname of your host
+machine, which is also accessible from the vagrant guest)::
 
     $ ZSERVER_HOST=HOST_LAN_IP bin/pybot -v ZOPE_HOST:HOST_LAN_IP -v REMOTE_URL:http://localhost:4444/wd/hub example.robot
 
