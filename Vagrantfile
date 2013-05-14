@@ -1,7 +1,7 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-Vagrant.configure("2") do |config|
+Vagrant::Config.run do |config|
 
   # Require 32bit Debian 7.0:
   config.vm.box = "wheezy32"
@@ -11,7 +11,7 @@ Vagrant.configure("2") do |config|
   config.vm.box_url = "https://dl.dropboxusercontent.com/u/228224/wheezy32.box"
 
   # Port forwarding for Selenium Server:
-  config.vm.network :forwarded_port, guest: 4444, host: 4444
+  config.vm.forward_port 4444, 4444
 
   # Handle provision with puppet:
   config.vm.provision :puppet do |puppet|
