@@ -147,11 +147,18 @@ while True:
   require => Package['python']
 }
 
+exec { "modprobe snd-aloop":
+  command => "sudo modprobe snd-aloop index=0 pcm_substreams=1",
+  path => ["/bin", "/usr/bin"],
+  require => Package["alsa-utils"]
+}
+
 file { "/etc/modules":
   ensure => "present",
   content => 'loop
 snd-aloop index=0 pcm_substreams=1
-'
+',
+  require => Exec["modprobe snd-aloop"]
 }
 
 file { "/etc/asound.conf":
