@@ -177,3 +177,9 @@ Executing the test::
 
 The test execution should result an "out.TIMESTAMP.flv" file in the current
 (vagrant) directory.
+
+.. raw:: html
+
+   <p style="text-align: center;">
+   <iframe width="420" height="315" src="http://www.youtube.com/embed/DAJ30qldJak" frameborder="0" allowfullscreen></iframe>
+   </p>
