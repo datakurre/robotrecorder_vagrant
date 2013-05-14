@@ -293,7 +293,10 @@ exec { "service supervisor stop":
   require => [
     Package["supervisor"],
     File["/etc/supervisor/conf.d/xvfb.conf"],
-    File["/etc/supervisor/conf.d/selenium-server.conf"]
+    File["/etc/supervisor/conf.d/selenium-server.conf"],
+    File["/etc/supervisor/conf.d/rec-window.conf"],
+    File["/etc/supervisor/conf.d/rec-start.conf"],
+    File["/etc/supervisor/conf.d/rec-stop.conf"]
   ],
   path => ["/usr/bin"]
 }
