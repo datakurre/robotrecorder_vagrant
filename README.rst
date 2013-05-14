@@ -26,7 +26,7 @@ Plone Example
         plone.app.robotframework[speak]
     scripts = pybot
 
-::
+Running the buildout::
 
     $ python bootstrap.py
     $ bin/buildout
@@ -171,6 +171,9 @@ Plone Example
         Update element style  visual-portal-wrapper  margin-top  50%
         Sleep  3s
 
-::
+Executing the test::
 
     $ ZSERVER_HOST=HOST_LAN_IP bin/pybot -v ZOPE_HOST:HOST_LAN_IP -v REMOTE_URL:http://localhost:4444/wd/hub example.robot
+
+The test execution should result an "out.TIMESTAMP.flv" file in the current
+(vagrant) directory.
