@@ -176,7 +176,7 @@ Executing the test::
     $ ZSERVER_HOST=HOST_LAN_IP bin/pybot -v ZOPE_HOST:HOST_LAN_IP -v REMOTE_URL:http://localhost:4444/wd/hub example.robot
 
 The test execution should result an "out.TIMESTAMP.flv" file in the current
-(vagrant) directory.
+(vagrant) directory: http://www.youtube.com/watch?v=DAJ30qldJak
 
 .. raw:: html
 
