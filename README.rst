@@ -183,3 +183,6 @@ The test execution should result an "out.TIMESTAMP.flv" file in the current
    <p style="text-align: center;">
    <iframe width="420" height="315" src="http://www.youtube.com/embed/DAJ30qldJak" frameborder="0" allowfullscreen></iframe>
    </p>
+
+See the puppet manifest for used technologies (selenium, Xvfb, x11vnc, vnc2flv,
+arecord...).
