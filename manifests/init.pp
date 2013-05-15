@@ -150,6 +150,7 @@ while True:
 exec { "modprobe snd-aloop":
   command => "sudo modprobe snd-aloop index=0 pcm_substreams=1",
   path => ["/bin", "/usr/bin"],
+  onlyif => "test `sudo lsmod | grep -c snd_aloop` -eq 0",
   require => Package["alsa-utils"]
 }
 
@@ -158,7 +159,7 @@ file { "/etc/modules":
   content => 'loop
 snd-aloop index=0 pcm_substreams=1
 ',
-  require => Exec["modprobe snd-aloop"]
+  require => Package["alsa-utils"]
 }
 
 file { "/etc/asound.conf":
@@ -237,8 +238,22 @@ autorestart=false',
 
 exec { "DISPLAY=:99 supervisord":
   command => "sudo sed -i -e 's/DESC=supervisor/DESC=supervisor\\n\\nexport DISPLAY=:99/' /etc/init.d/supervisor",
-  onlyif => "test `grep DISPLAY /etc/init.d/supervisor | wc -l` -lt 1",
+  onlyif => "test `grep -c DISPLAY /etc/init.d/supervisor` -eq 0",
   require => Package["supervisor"],
+  path => ["/bin", "/usr/bin"]
+}
+
+exec { "service supervisor stop":
+  command => "sudo service supervisor stop",
+  refreshonly => true,
+  subscribe => Exec["DISPLAY=:99 supervisord"],
+  path => ["/bin", "/usr/bin"]
+}
+
+exec { "service supervisor start":
+  command => "sudo service supervisor start",
+  refreshonly => true,
+  subscribe => Exec["service supervisor stop"],
   path => ["/bin", "/usr/bin"]
 }
 
@@ -289,29 +304,20 @@ file { "/etc/supervisor/conf.d/rec-stop.conf":
   content => '[program:rec-stop]
 command=/usr/local/bin/rec-stop.sh
 priority=50
-autostart=true
+rutostart=true
 autorestart=false',
   require => File['/usr/local/bin/rec-stop.sh']
 }
 
-exec { "service supervisor stop":
-  command => "sudo service supervisor stop",
-  onlyif => "test `sudo supervisorctl status | wc -l` -eq 0",
-  require => [
-    Package["supervisor"],
+exec { "sudo supervisorctl reload":
+  command => "sudo supervisorctl reload",
+  refreshonly => true,
+  subscribe => [
     File["/etc/supervisor/conf.d/xvfb.conf"],
     File["/etc/supervisor/conf.d/selenium-server.conf"],
     File["/etc/supervisor/conf.d/rec-window.conf"],
     File["/etc/supervisor/conf.d/rec-start.conf"],
     File["/etc/supervisor/conf.d/rec-stop.conf"]
   ],
-  path => ["/usr/bin"]
-}
-
-exec { "service supervisor start":
-  command => "sudo service supervisor start",
-  # Start when is not started ("unix:///var/run/supervisor.sock no such file"):
-  onlyif => "test `sudo supervisorctl status | wc -l` -eq 1",
-  require => Exec["service supervisor stop"],
   path => ["/usr/bin"]
 }
