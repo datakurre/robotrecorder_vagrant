@@ -22,11 +22,11 @@ alsa (arecord).
 Robot Framework example
 -----------------------
 
-./bootstrap.py::
+``./bootstrap.py``::
 
     $ curl -O http://downloads.buildout.org/2/bootstrap.py
 
-./buildout.cfg::
+``./buildout.cfg``::
 
     [buildout]
     parts = pybot
@@ -42,7 +42,7 @@ Running the buildout::
     $ python bootstrap.py
     $ bin/buildout
 
-example.robot::
+``./example.robot``::
 
     *** Settings ***
 
@@ -81,11 +81,11 @@ vagrant working directory.
 Annotated Plone screencast example
 ----------------------------------
 
-./bootstrap.py::
+``./bootstrap.py``::
 
     $ curl -O http://downloads.buildout.org/2/bootstrap.py
 
-./buildout.cfg::
+``./buildout.cfg``::
 
     [buildout]
     extends = http://dist.plone.org/release/4.3-latest/versions.cfg
@@ -103,7 +103,7 @@ Running the buildout::
     $ python bootstrap.py
     $ bin/buildout
 
-./example.robot::
+``./example.robot``::
 
     *** Settings ***
 
