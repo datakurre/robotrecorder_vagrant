@@ -1,9 +1,79 @@
 RobotRecorder Vagrant
 =====================
 
-::
+This is package provides a vagrant provision for a single instance Selenium
+server, which can records tests (with audio) and save the results as a
+flv-file.
 
+::
+    $ git clone https://github.com/datakurre/robotrecorder_vagrant.git
+    $ cd robotrecorder_vagrant
     $ vagrant up
+
+Limitations: The current configuration runs the tests on Iceweasel
+(Firefox for Debian). Only one active window at time can be recorded.
+
+The toolchain is based on: Selenium-server, Xvfb, x11vnc, vnc2flc and
+alsa (arecord).
+
+
+Robot Framework example
+-----------------------
+
+./bootstrap.py::
+
+    $ curl -O http://downloads.buildout.org/2/bootstrap.py
+
+./buildout.cfg::
+
+    [buildout]
+    parts = pybot
+
+    [pybot]
+    recipe = zc.recipe.egg
+    eggs =
+        robotframework
+        robotframework-selenium2library
+
+Running the buildout::
+
+    $ python bootstrap.py
+    $ bin/buildout
+
+example.robot::
+
+    *** Settings ***
+
+    Library  Selenium2Library
+
+    Test Setup  Open browser  about:  remote_url=http://localhost:4444/wd/hub
+    Test Teardown  Close all browsers
+
+    *** Test cases ***
+
+    We should be on the first page
+        Go to  http://www.google.com/
+        Input text  q  Plone
+        Wait until page contains element  xpath=//a[@href='http://plone.org/']
+        Click link  xpath=//a[@href='http://plone.org/']
+        Wait until location is  http://plone.org/
+        Title should be  Plone CMS: Open Source Content Management
+
+    *** Keywords ***
+
+    Wait until location is
+        [Arguments]  ${expected_url}
+        ${timeout} =  Get Selenium timeout
+        ${implicit_wait} =  Get Selenium implicit wait
+        Wait until keyword succeeds  ${timeout}  ${implicit_wait}
+        ...                          Location should be  ${expected_url}
+
+Executing the test::
+
+    $ bin/pybot example.robot
+
+The test execution should result an "out.TIMESTAMP.flv" file in the current
+vagrant working directory.
 
 
 Plone Example
@@ -30,7 +100,6 @@ Running the buildout::
 
     $ python bootstrap.py
     $ bin/buildout
-
 
 ./example.robot::
 
@@ -171,19 +240,12 @@ Running the buildout::
         Update element style  visual-portal-wrapper  margin-top  50%
         Sleep  3s
 
-Executing the test (replace HOST_LAN_IP with a such IP or hostname of your host
-machine, which is also accessible from the vagrant guest)::
+Executing the test::
 
     $ ZSERVER_HOST=HOST_LAN_IP bin/pybot -v ZOPE_HOST:HOST_LAN_IP -v REMOTE_URL:http://localhost:4444/wd/hub example.robot
 
+Replace HOST_LAN_IP with a such IP or hostname of your host machine, which is
+also accessible from the vagrant guest.
+
 The test execution should result an "out.TIMESTAMP.flv" file in the current
-(vagrant) directory: http://www.youtube.com/watch?v=DAJ30qldJak
-
-.. raw:: html
-
-   <p style="text-align: center;">
-   <iframe width="420" height="315" src="http://www.youtube.com/embed/DAJ30qldJak" frameborder="0" allowfullscreen></iframe>
-   </p>
-
-See the puppet manifest for used technologies (selenium, Xvfb, x11vnc, vnc2flv,
-arecord...).
+vagrant working directory: http://www.youtube.com/watch?v=DAJ30qldJak
