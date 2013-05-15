@@ -175,7 +175,7 @@ pcm.dmixer {
   slave.period_time 0
   slave.period_size 1024
   slave.buffer_size 4096
-  slave.rate 4410
+  slave.rate 44100
 }
 pcm.loop {
   type plug
