@@ -1,9 +1,9 @@
 RobotRecorder Vagrant
 =====================
 
-This is package provides a vagrant provision for a single instance Selenium
-server, which can records tests (with audio) and save the results as a
-flv-file.
+This is an example vagrant provision for a single instance Selenium server,
+which can automatically record browser tests (with audio) and save the results
+into a flv-file on the host machine.
 
 ::
 
@@ -11,10 +11,11 @@ flv-file.
     $ cd robotrecorder_vagrant
     $ vagrant up
 
-Limitations: The current configuration runs the tests on Iceweasel
-(Firefox for Debian). Only one active window at time can be recorded.
+The current configuration runs the tests on Iceweasel (Firefox for Debian).
+Only one active window at time can be recorded. These limitation are mainly to
+keep the configuration simple.
 
-The toolchain is based on: Selenium-server, Xvfb, x11vnc, vnc2flc and
+The recording toolchain is based on: Selenium-server, Xvfb, x11vnc, vnc2flc and
 alsa (arecord).
 
 
@@ -73,12 +74,12 @@ Executing the test::
 
     $ bin/pybot example.robot
 
-The test execution should result an "out.TIMESTAMP.flv" file in the current
+The test execution should result an ``out.TIMESTAMP.flv`` file in the current
 vagrant working directory.
 
 
-Plone Example
--------------
+Annotated Plone screencast example
+----------------------------------
 
 ./bootstrap.py::
 
@@ -243,10 +244,10 @@ Running the buildout::
 
 Executing the test::
 
-    $ ZSERVER_HOST=HOST_LAN_IP bin/pybot -v ZOPE_HOST:HOST_LAN_IP -v REMOTE_URL:http://localhost:4444/wd/hub example.robot
+    $ ZSERVER_HOST=MY_HOST_LAN_IP bin/pybot -v ZOPE_HOST:MY_HOST_LAN_IP -v REMOTE_URL:http://localhost:4444/wd/hub example.robot
 
-Replace HOST_LAN_IP with a such IP or hostname of your host machine, which is
-also accessible from the vagrant guest.
+Replace ``MY_HOST_LAN_IP`` with a such IP or hostname of your host machine
+which is also accessible from the vagrant guest.
 
-The test execution should result an "out.TIMESTAMP.flv" file in the current
+The test execution results an ``out.TIMESTAMP.flv`` file in the current
 vagrant working directory: http://www.youtube.com/watch?v=DAJ30qldJak
