@@ -1,9 +1,9 @@
 RobotRecorder Vagrant
 =====================
 
-This is an example vagrant provision for a single instance Selenium server,
-which can automatically record browser tests (with audio) and save the results
-into a flv-file on the host machine.
+This is an example `vagrant <http://vagrantup.com/>`_  provision for a single
+instance Selenium server, which can automatically record browser tests (with
+audio) and save the results into a flv-file on the host machine.
 
 ::
 
