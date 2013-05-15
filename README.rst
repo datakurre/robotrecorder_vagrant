@@ -6,6 +6,7 @@ server, which can records tests (with audio) and save the results as a
 flv-file.
 
 ::
+
     $ git clone https://github.com/datakurre/robotrecorder_vagrant.git
     $ cd robotrecorder_vagrant
     $ vagrant up
