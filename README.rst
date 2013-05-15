@@ -2,8 +2,9 @@ RobotRecorder Vagrant
 =====================
 
 This is an example `vagrant <http://vagrantup.com/>`_  provision for a single
-instance Selenium server, which can automatically record browser tests (with
-audio) and save the results into a flv-file on the host machine.
+session `Selenium <http://seleniumhq.org/>`_ server with automatic video
+recording of executed browser tests (including audio). The recordings will be
+saved into flv files on the host machine.
 
 ::
 
@@ -15,8 +16,8 @@ The current configuration runs the tests on Iceweasel (Firefox for Debian).
 Only one active window at time can be recorded. These limitation are mainly to
 keep the configuration simple.
 
-The recording toolchain is based on: Selenium-server, Xvfb, x11vnc, vnc2flc and
-alsa (arecord).
+The recording toolchain is based on Xvfb, x11vnc, vnc2flc and alsa (snd_aloop
+and arecord).
 
 
 Robot Framework example
