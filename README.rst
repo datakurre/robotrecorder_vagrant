@@ -4,7 +4,7 @@ RobotRecorder Vagrant
 This is an example `vagrant <http://vagrantup.com/>`_  provision for a single
 session `Selenium <http://seleniumhq.org/>`_ server with automatic video
 recording of executed browser tests (including audio). The recordings will be
-saved into flv files on the host machine.
+saved into flv files onto a directory shared with the host machine.
 
 ::
 
@@ -75,8 +75,8 @@ Executing the test::
 
     $ bin/pybot example.robot
 
-The test execution should result an ``out.TIMESTAMP.flv`` file in the current
-vagrant working directory.
+The test execution should result an ``./recordinsgs/out.TIMESTAMP.flv`` file
+below the current vagrant working directory.
 
 
 Annotated Plone screencast example
@@ -250,5 +250,6 @@ Executing the test::
 Replace ``MY_HOST_LAN_IP`` with a such IP or hostname of your host machine
 which is also accessible from the vagrant guest.
 
-The test execution results an ``out.TIMESTAMP.flv`` file in the current
-vagrant working directory: http://www.youtube.com/watch?v=DAJ30qldJak
+The test execution should result an ``./recordinsgs/out.TIMESTAMP.flv`` file
+below the current vagrant working directory. An example recording for the test
+above is published at: http://www.youtube.com/watch?v=DAJ30qldJak

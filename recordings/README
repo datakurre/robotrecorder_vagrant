@@ -1,0 +1,6 @@
+Please, don't remove this file.
+
+- Vagrant guest will use this file to detect that the folder has been mounted.
+- Vagrant guest will save recordings into this directory only when this README
+  exists.
+- Also, git will use this file to keep the directory in the repository.

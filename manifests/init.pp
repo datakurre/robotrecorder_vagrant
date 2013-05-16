@@ -66,32 +66,34 @@ package { "xserver-xorg-core":
 
 package { "x11-xkb-utils":
   ensure => "present",
-  require => Package["xserver-xorg-core"]
+  require => Exec["apt-get update"]
 }
 
 package { "xfonts-75dpi":
   ensure => "present",
-  require => Package["xserver-xorg-core"]
+  require => Exec["apt-get update"]
 }
 
 package { "xfonts-100dpi":
   ensure => "present",
-  require => Package["xserver-xorg-core"]
+  require => Exec["apt-get update"]
 }
 
 package { "xfonts-scalable":
   ensure => "present",
-  require => Package["xserver-xorg-core"]
+  require => Exec["apt-get update"]
 }
 
 package { "xfonts-cyrillic":
   ensure => "present",
-  require => Package["xserver-xorg-core"]
+  require => Exec["apt-get update"]
 }
 
 package { "xvfb":
   ensure => "present",
   require => [
+    Package["xserver-xorg-core"],
+    Package["x11-xkb-utils"],
     Package["xfonts-75dpi"],
     Package["xfonts-100dpi"],
     Package["xfonts-scalable"],
@@ -116,7 +118,12 @@ file { "/usr/share/selenium":
 exec { "/usr/share/selenium/selenium-server-standalone.jar":
   creates => "/usr/share/selenium/selenium-server-standalone.jar",
   command => "wget -O /usr/share/selenium/selenium-server-standalone.jar http://selenium.googlecode.com/files/selenium-server-standalone-2.32.0.jar",
-  require => File["/usr/share/selenium"],
+  require => [
+    File["/usr/share/selenium"],
+    Package["openjdk-6-jre"],
+    Package["icedtea-6-plugin"],
+    Package["iceweasel"],
+  ],
   path => ["/usr/bin"]
 }
 
@@ -144,7 +151,10 @@ while True:
     elif os.path.exists("/run/recordwin.wid"):
         os.unlink("/run/recordwin.wid")
     time.sleep(1)',
-  require => Package['python']
+  require => [
+    Package['xserver-xorg-core'],
+    Package['python'],
+  ]
 }
 
 exec { "modprobe snd-aloop":
@@ -188,11 +198,9 @@ file { "/usr/local/bin/rec-start.sh":
   ensure => "present",
   mode => 0744,
   content => '#!/bin/sh
-cd /vagrant
-while [ ! -f /run/recordwin.wid ]
-do
-  sleep 1
-done
+while [ ! -f /recordings/README ]; do sleep 1; done
+cd /recordings
+while [ ! -f /run/recordwin.wid ]; do sleep 1; done
 echo $$ > /run/recordwin.pid
 X11VNC="x11vnc -nocursor" ARECORD="arecord -Dloop -r22050 -fS16_LE" recordwin.sh -display :99 -id `cat /run/recordwin.wid`',
   require => [
@@ -209,10 +217,7 @@ while [ true ]
 do
   if [ -f /run/recordwin.pid ]
   then
-    while [ -f /run/recordwin.wid ]
-    do
-      sleep 1
-    done
+    while [ -f /run/recordwin.wid ]; do sleep 1; done
     bash -c "kill -n 2 -`cat /run/recordwin.pid`"
     rm /run/recordwin.pid
   fi
@@ -266,9 +271,6 @@ autostart=true
 autorestart=false
 stopasgroup=true',
   require => [
-    Package["openjdk-6-jre"],
-    Package["icedtea-6-plugin"],
-    Package["iceweasel"],
     Exec["/usr/share/selenium/selenium-server-standalone.jar"],
     File["/etc/supervisor/conf.d/xvfb.conf"],
     Exec["DISPLAY=:99 supervisord"]
@@ -283,8 +285,7 @@ priority=30
 autostart=true
 autorestart=false',
   require => [
-    Package["python"],
-    File["/etc/supervisor/conf.d/xvfb.conf"],
+    File["/usr/local/bin/rec-window.py"],
     Exec["DISPLAY=:99 supervisord"]
   ]
 }
@@ -296,7 +297,10 @@ command=/usr/local/bin/rec-start.sh
 priority=40
 autostart=true
 autorestart=true',
-  require => File['/usr/local/bin/rec-start.sh']
+  require => [
+    File['/usr/local/bin/rec-start.sh'],
+    Exec["DISPLAY=:99 supervisord"]
+  ]
 }
 
 file { "/etc/supervisor/conf.d/rec-stop.conf":
@@ -317,7 +321,12 @@ exec { "sudo supervisorctl reload":
     File["/etc/supervisor/conf.d/selenium-server.conf"],
     File["/etc/supervisor/conf.d/rec-window.conf"],
     File["/etc/supervisor/conf.d/rec-start.conf"],
-    File["/etc/supervisor/conf.d/rec-stop.conf"]
+    File["/etc/supervisor/conf.d/rec-stop.conf"],
+
+    Exec["/usr/share/selenium/selenium-server-standalone.jar"],
+    File["/usr/local/bin/rec-window.py"],
+    File['/usr/local/bin/rec-stop.sh'],
+    File['/usr/local/bin/rec-start.sh']
   ],
   path => ["/usr/bin"]
 }
