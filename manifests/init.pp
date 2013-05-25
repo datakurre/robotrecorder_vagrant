@@ -127,6 +127,10 @@ exec { "/usr/share/selenium/selenium-server-standalone.jar":
   path => ["/usr/bin"]
 }
 
+package { "dos2unix":
+  ensure => "present"
+}
+
 file { "/usr/local/bin/rec-window.py":
   ensure => "present",
   mode => 0744,
@@ -153,8 +157,16 @@ while True:
     time.sleep(1)',
   require => [
     Package['xserver-xorg-core'],
-    Package['python'],
+    Package['python']
   ]
+}
+
+exec { "dos2unix /usr/local/bin/rec-window.py":
+  command => "sudo dos2unix /usr/local/bin/rec-window.py",
+  subscribe => File["/usr/local/bin/rec-window.py"],
+  refreshonly => true,
+  path => ["/usr/bin"],
+  require => Package["dos2unix"]
 }
 
 exec { "modprobe snd-aloop":
@@ -194,6 +206,14 @@ pcm.loop {
   require => File["/etc/modules"]
 }
 
+exec { "dos2unix /etc/asound.conf":
+  command => "sudo dos2unix /etc/asound.conf",
+  subscribe => File["/etc/asound.conf"],
+  refreshonly => true,
+  path => ["/usr/bin"],
+  require => Package["dos2unix"]
+}
+
 file { "/usr/local/bin/rec-start.sh":
   ensure => "present",
   mode => 0744,
@@ -207,6 +227,14 @@ X11VNC="x11vnc -nocursor" ARECORD="arecord -Dloop -r22050 -fS16_LE" recordwin.sh
     Exec['vnc2flv'],
     File['/etc/asound.conf']
   ]
+}
+
+exec { "dos2unix /usr/local/bin/rec-start.sh":
+  command => "sudo dos2unix /usr/local/bin/rec-start.sh",
+  subscribe => File["/usr/local/bin/rec-start.sh"],
+  refreshonly => true,
+  path => ["/usr/bin"],
+  require => Package["dos2unix"]
 }
 
 file { "/usr/local/bin/rec-stop.sh":
@@ -226,6 +254,14 @@ done',
   require => [
     File['/usr/local/bin/rec-start.sh']
   ]
+}
+
+exec { "dos2unix /usr/local/bin/rec-stop.sh":
+  command => "sudo dos2unix /usr/local/bin/rec-stop.sh",
+  subscribe => File["/usr/local/bin/rec-stop.sh"],
+  refreshonly => true,
+  path => ["/usr/bin"],
+  require => Package["dos2unix"]
 }
 
 file { "/etc/supervisor/conf.d/xvfb.conf":
