@@ -56,7 +56,7 @@ Running the buildout::
 
     We should be on the first page
         Go to  http://www.google.com/
-        Input text  q  Plone
+        Input text  q  Plone\\n
         Wait until page contains element  xpath=//a[@href='http://plone.org/']
         Click link  xpath=//a[@href='http://plone.org/']
         Wait until location is  http://plone.org/
