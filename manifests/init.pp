@@ -122,7 +122,7 @@ exec { "/usr/share/selenium/selenium-server-standalone.jar":
     File["/usr/share/selenium"],
     Package["openjdk-6-jre"],
     Package["icedtea-6-plugin"],
-    Package["iceweasel"],
+    Package["iceweasel"]
   ],
   path => ["/usr/bin"]
 }
