@@ -150,7 +150,7 @@ Running the buildout::
 
         ${note1} =  Add note
         ...    css=#plone-contentmenu-factories
-        ...    At first, click Add new… to open the menu
+        ...    At first, click Add new... to open the menu
         ...    width=180  position=left
 
         Speak  At first, I click the Add new menu.
