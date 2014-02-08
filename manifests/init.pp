@@ -1,7 +1,7 @@
 exec { "apt-get update":
   command => "sudo apt-get update",
   # Update package list once every day:
-  onlyif => "test `sudo find /var/lib/apt -type f -mtime 0 | wc -l` -eq 0",
+  # onlyif => "test `sudo find /var/lib/apt -type f -mtime 0 | wc -l` -eq 0",
   path => ["/usr/bin"],
   timeout => 3600
 }
