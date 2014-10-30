@@ -10,7 +10,7 @@ saved into flv files onto a directory shared with the host machine.
 
     $ git clone https://github.com/datakurre/robotrecorder_vagrant.git
     $ cd robotrecorder_vagrant
-    $ vagrant up
+    $ vagrant up || vagrant provision
 
 The current configuration runs the tests on Iceweasel (Firefox for Debian).
 Only one active window at time can be recorded. These limitation are mainly to
@@ -56,10 +56,10 @@ Running the buildout::
 
     We should be on the first page
         Go to  http://www.google.com/
-        Input text  q  Plone\\n
-        Wait until page contains element  xpath=//a[@href='http://plone.org/']
-        Click link  xpath=//a[@href='http://plone.org/']
-        Wait until location is  http://plone.org/
+        Input text  q  Plone\n
+        Wait until page contains  Plone CMS: Open Source Content Management
+        Click link  Plone CMS: Open Source Content Management
+        Wait until location is  https://plone.org/
         Title should be  Plone CMS: Open Source Content Management
 
     *** Keywords ***
@@ -89,7 +89,9 @@ Annotated Plone screencast example
 ``./buildout.cfg``::
 
     [buildout]
-    extends = http://dist.plone.org/release/4.3-latest/versions.cfg
+    extends =
+        http://dist.plone.org/release/4.3-latest/versions.cfg
+        https://raw.githubusercontent.com/plone/plone.app.robotframework/master/versions.cfg
     parts = pybot
 
     [pybot]
@@ -245,9 +247,9 @@ Running the buildout::
 
 Executing the test::
 
-    $ ZSERVER_HOST=MY_HOST_LAN_IP bin/pybot -v ZOPE_HOST:MY_HOST_LAN_IP -v REMOTE_URL:http://localhost:4444/wd/hub example.robot
+    $ ZSERVER_HOST=0.0.0.0 bin/pybot -v ZOPE_HOST:$MY_HOST_LAN_IP -v REMOTE_URL:http://localhost:4444/wd/hub example.robot
 
-Replace ``MY_HOST_LAN_IP`` with a such IP or hostname of your host machine
+Replace ``$MY_HOST_LAN_IP`` with a such IP or hostname of your host machine
 which is also accessible from the vagrant guest.
 
 The test execution should result an ``./recordinsgs/out.TIMESTAMP.flv`` file
